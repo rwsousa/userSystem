@@ -2,6 +2,21 @@ const form = document.querySelector("formCadastro");
 const cep = document.querySelector("#cep");
 const buscarCep = document.querySelector("#buscarCep");
 
+function mensagem(texto, tipo = "sucesso") {
+    Toastify({
+        text: texto,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        style: {
+            background: tipo === "sucesso"
+                ? "#198754"
+                : "#dc3545"
+        }
+    }).showToast();
+}
+
+
     // escuta o evento do formulário
 form.addEventListener("submit", function(event) {
     event.preventDefault();
@@ -18,7 +33,7 @@ form.addEventListener("submit", function(event) {
 buscarCep.addEventListener("click", async function () {
     const valor = cep.value.replace (/\D/g, "");
     if (valor.length !== 8) {
-        alert("Digite um CEP válido!");
+        alert("Digite um CEP válido!", "erro");
         return;
     }
     try {
@@ -30,10 +45,11 @@ buscarCep.addEventListener("click", async function () {
         document.querySelector("#bairro").value = dados.bairro;
         document.querySelector("#estado").value = dados.estado;
         document.querySelector("#cidade").value = dados.localidade;
+        mensagem("CEP encontrado com sucesso!")
     }
 
     catch (erro) {
-        alert("Erro capturado: " +  erro.message);
+        mensagem(erro.message, "erro");
     }
         
 
